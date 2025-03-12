@@ -13,11 +13,19 @@
 #include <time.h>
 #include <unistd.h>
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#define TLS_client_method SSLv23_client_method
+#endif
+
 SSL_CTX *initialize_ssl() {
-  SSL_library_init();
-  OpenSSL_add_all_algorithms();
-  SSL_load_error_strings();
-  return SSL_CTX_new(TLS_client_method());
+    // Initialize OpenSSL library (necessary for OpenSSL 1.0.x)
+    SSL_library_init();
+    OpenSSL_add_all_algorithms();
+    SSL_load_error_strings();
+
+    // Use SSLv23_client_method() for compatibility with older OpenSSL versions
+    const SSL_METHOD *method = SSLv23_client_method();  // SSLv23 is a generic client method
+    return SSL_CTX_new(method);
 }
 
 int verify_certificate(SSL *ssl) {
