@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -pthread -I/usr/include/openssl
-LDFLAGS = -pthread -lssl -lcrypto
+LDFLAGS = -pthread -L/usr/lib/x86_64-linux-gnu -lssl -L/usr/lib/x86_64-linux-gnu -lcrypto
 BIN_DIR = bin
 SRC_DIR = src
 DOC_DIR = doc
